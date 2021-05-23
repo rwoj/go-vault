@@ -1,0 +1,47 @@
+server: 
+  jwt_token_secret: notsosecretjwttokenpass
+  monitoring: 
+    enabled: false
+    host: 0.0.0.0
+    port: 6060
+
+chains:
+  eth: 
+    tx: eth.wallet.transaction
+    tx_confirmed: eth.wallet.transaction.confirmed
+    command: eth.wallet.command
+    command_reply: eth.wallet.command.reply
+  btc: 
+    tx: btc.wallet.transaction
+    tx_confirmed: btc.wallet.transaction.confirmed
+    command: btc.wallet.command
+    command_reply: btc.wallet.command.reply
+
+brokers:
+  consumers:
+    events: 
+      name: vault_manager
+      hosts: 
+        - kafka:9092
+      topics:
+        - eth.wallet.transaction
+        - eth.wallet.transaction.confirmed
+        - eth.wallet.command.reply
+        - btc.wallet.transaction
+        - btc.wallet.transaction.confirmed
+        - btc.wallet.command.reply
+        - errors
+  producers:
+    commands: 
+      hosts: 
+        - kafka:9092
+      topics: 
+        - eth.wallet.command
+        - btc.wallet.command
+
+database:
+  host: database
+  username: vault
+  password: vault_pass
+  name: vault
+  port: 5432 
